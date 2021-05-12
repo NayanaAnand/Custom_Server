@@ -14,7 +14,7 @@ Custom_Server_base::Custom_Server_base(const char *uuid, const char *label) :
     Component(uuid, label),
     ThreadedComponent()
 {
-    setThreadName(label);
+    //setThreadName(label);
 
     loadProperties();
 }
