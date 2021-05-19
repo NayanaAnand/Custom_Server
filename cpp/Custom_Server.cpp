@@ -81,21 +81,21 @@ int Custom_Server_i::serviceFunction()
 
     //func(connfd);
 
-    for (;;) {
+    //for (;;) {
             bzero(buff, MAX);
-            read(sockfd, buff, sizeof(buff));
-            LOG_INFO(Custom_Server_i, "Data Recieved " << buff);
-            printf("From client: %s\t To client : ", buff);
+            read(connfd, buff, sizeof(buff));
+            LOG_INFO(Custom_Server_i, "Data Recieved : " << buff);
+            //printf("From client: %s\t To client : ", buff);
             //while ((buff[n++] = getchar()) != '\n');
             bzero(buff, MAX);
-            strcpy(buff, "I am Server Component");
-            write(sockfd, buff, sizeof(buff));
+            strcpy(buff, "Hi, I am Server");
+            write(connfd, buff, sizeof(buff));
 
             if (strncmp("exit", buff, 4) == 0) {
                     printf("Server Exit...\n");
-                    break;
+            //        break;
             }
-    }
+    //}
 
 	close(sockfd);
 
