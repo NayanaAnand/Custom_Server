@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #define MAX 80
-#define PORT 8080
+#define PORT 4455
 #define SA struct sockaddr
 
 PREPARE_LOGGING(Custom_Server_i)
@@ -39,13 +39,12 @@ int Custom_Server_i::serviceFunction()
 {
     //RH_DEBUG(this->_baseLog, "serviceFunction() example log message");
 
-    char buff[MAX], *buf;
-    int n;
-	int sockfd, connfd, len;
+    char buff[MAX];
+    int sockfd, connfd, len;
     struct sockaddr_in servaddr, cli;
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-        if (sockfd == -1) {
+        if (sockfd < 0) {
                 printf("socket creation failed...\n");
                 exit(0);
         }
@@ -54,7 +53,7 @@ int Custom_Server_i::serviceFunction()
         bzero(&servaddr, sizeof(servaddr));
 
 	servaddr.sin_family = AF_INET;
-        servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+        servaddr.sin_addr.s_addr = htons(INADDR_ANY);
         servaddr.sin_port = htons(PORT);
 
 	if ((bind(sockfd, (SA*)&servaddr, sizeof(servaddr))) != 0) {
@@ -78,22 +77,21 @@ int Custom_Server_i::serviceFunction()
                 exit(0);
         }
         else
-                printf("server acccept the client...\n");
+                LOG_INFO(Custom_Server_i,"server acccepted the client...");
 
     //func(connfd);
 
     for (;;) {
             bzero(buff, MAX);
             read(sockfd, buff, sizeof(buff));
-            LOG_INFO(Custom_Server_i, "Data Recieved");
+            LOG_INFO(Custom_Server_i, "Data Recieved " << buff);
             printf("From client: %s\t To client : ", buff);
-            bzero(buff, MAX);
-            n = 0;
             //while ((buff[n++] = getchar()) != '\n');
-            buf = "I am Server component";
-            write(sockfd, buf, sizeof(buf));
+            bzero(buff, MAX);
+            strcpy(buff, "I am Server Component");
+            write(sockfd, buff, sizeof(buff));
 
-            if (strncmp("exit", buf, 4) == 0) {
+            if (strncmp("exit", buff, 4) == 0) {
                     printf("Server Exit...\n");
                     break;
             }
