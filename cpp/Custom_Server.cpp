@@ -81,7 +81,7 @@ int Custom_Server_i::serviceFunction()
 
     //func(connfd);
 
-    //for (;;) {
+    while(1) {
             bzero(buff, MAX);
             read(connfd, buff, sizeof(buff));
             LOG_INFO(Custom_Server_i, "Data Recieved : " << buff);
@@ -93,9 +93,9 @@ int Custom_Server_i::serviceFunction()
 
             if (strncmp("exit", buff, 4) == 0) {
                     printf("Server Exit...\n");
-            //        break;
+                    break;
             }
-    //}
+    }
 
 	close(sockfd);
 
